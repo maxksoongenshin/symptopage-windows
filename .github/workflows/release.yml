@@ -1,0 +1,36 @@
+name: Publish tested Windows release
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/release.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Download verified Windows build
+        run: gh run download 37138724818 -n SymptoPage-Windows-x64 -D release-assets
+      - name: Publish release
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > notes.md <<'NOTES'
+          Windows 10/11 x64 preview. English / Polski, appointment planning, Now / Teraz symptom capture, daily check-ins, editable journal, PDF and local storage. No demo records.
+
+          **Как запустить:** скачайте EXE с названием Setup для установки либо portable EXE для запуска без установки. ZIP нужно полностью распаковать и запустить SymptoPage.exe.
+
+          Built and tested on Windows. Storage and Electron UI tests passed, including PDF export and persistence after restart.
+          Unsigned preview build.
+          NOTES
+          if ! gh release view v0.4.0 >/dev/null 2>&1; then
+            gh release create v0.4.0 --target 87f8cab674cf8a254dbe7e58668bb979b46ae4cb --draft --prerelease --title "SymptoPage 0.4.0 — Windows" --notes-file notes.md
+          fi
+          gh release upload v0.4.0 release-assets/*.exe release-assets/*.zip release-assets/SHA256SUMS.txt --clobber
+          gh release edit v0.4.0 --draft=false --prerelease --title "SymptoPage 0.4.0 — Windows" --notes-file notes.md

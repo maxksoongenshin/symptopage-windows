@@ -1,0 +1,58 @@
+{
+  "name": "symptopage-windows",
+  "productName": "SymptoPage",
+  "version": "0.4.0",
+  "private": true,
+  "description": "A private, local symptom journal and appointment companion. English and Polish.",
+  "author": "SymptoPage",
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/store.test.cjs",
+    "test:ui": "playwright test",
+    "build:win": "electron-builder --win nsis portable zip --x64 --publish never",
+    "build:dir": "electron-builder --dir --publish never",
+    "postinstall": "node node_modules/electron/install.js"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3",
+    "@playwright/test": "1.63.0"
+  },
+  "build": {
+    "appId": "app.symptopage.windows",
+    "productName": "SymptoPage",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**",
+      "ui/**",
+      "assets/**",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable",
+        "zip"
+      ],
+      "icon": "assets/icon.ico",
+      "signExecutable": false,
+      "artifactName": "SymptoPage-${version}-Windows-x64.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "SymptoPage-${version}-Windows-Setup.${ext}"
+    },
+    "portable": {
+      "artifactName": "SymptoPage-${version}-Windows-Portable.${ext}"
+    }
+  },
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

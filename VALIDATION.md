@@ -9,3 +9,7 @@
 - Binaries are unsigned. Public release signing, automatic updates, Windows accessibility audit and physical printing remain unverified.
 
 The Mac SwiftUI application and its existing data have not been modified by this port.
+
+## Windows CI — confirmed
+
+[Run 37138724818](https://github.com/maxksoongenshin/symptopage-windows/actions/runs/37138724818), commit `87f8cab674cf8a254dbe7e58668bb979b46ae4cb`, completed successfully on Windows in 3m 16s. Dependency installation, all storage tests, the full Electron UI test (including PDF generation and restart), NSIS installer, portable EXE, ZIP packaging and artifact upload passed. The local Mac limitations above are retained as an audit trail; they do not describe the Windows CI outcome.
